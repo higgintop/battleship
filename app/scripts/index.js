@@ -1,15 +1,17 @@
 /* jshint jquery:true */
 'use strict'
 function drawGameBoard(playerBoard, destination) {
-  var $table = $('<table></table>');
+  var $table = $('<table class="table table-bordered game_board"></table>');
   _.forEach(playerBoard, function(row){
     var $tr = $('<tr></tr>');
     _.forEach(row, function(cell) {
-        var $td = $('<td>' + cell + '<td>');
+        var $td = $('<td>' + cell + '</td>');
         $tr.append($td);
     });
     $table.append($tr);
   });
+
+  destination.append($table);
 }
 
 var gameBoardsList =

@@ -8,23 +8,27 @@
 }
 
 
+.game_board {
+
+    width: 625px;
+    height: 625px;
+
+    td {
+        width: 25px;
+        height: 25px;
+    }
+}
+
+
 
 .gameBoardContainer {
 
 
     .playerOwnBoard {
-
-    	width: 500px;
-    	height: 500px;
-    	border: 1px solid red;
     	float: left;
     }
 
     .playerOpponentBoard {
-
-    	width: 500px;
-    	height: 500px;
-    	border: 1px solid red;
     	float: right;
     }
 
