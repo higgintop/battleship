@@ -63,10 +63,10 @@ var game = {
 
 drawGameBoard(game.playerOne.myGuessesBoard, $('.playerOpponentBoard'));
 
-$('.playerOpponentBoard').on('click', 'td', function() {
+$('.playerOpponentBoard').on('click', 'td', function(event) {
     var yCoord = $(this).index();
     var xCoord = $(this).closest('tr').index();
-    $(this).unbind('click');
+    $(this).unbind(event);
     if (game.isPlayerOneTurn) {
       checkHit(game.playerTwo.myBoard, xCoord, yCoord);
     } else {
