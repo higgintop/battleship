@@ -1,3 +1,17 @@
+/* jshint jquery:true */
+'use strict'
+function drawGameBoard(playerBoard, destination) {
+  var $table = $('<table></table>');
+  _.forEach(playerBoard, function(row){
+    var $tr = $('<tr></tr>');
+    _.forEach(row, function(cell) {
+        var $td = $('<td>' + cell + '<td>');
+        $tr.append($td);
+    });
+    $table.append($tr);
+  });
+}
+
 var gameBoardsList =
 [
   [
