@@ -1,2 +1,24 @@
 @import "../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap";
 
+
+.gameBoardContainer {
+
+
+    .playerOwnBoard {
+
+    	width: 500px;
+    	height: 500px;
+    	border: 1px solid red;
+    	float: left;
+    }
+
+    .playerOpponentBoard {
+
+    	width: 500px;
+    	height: 500px;
+    	border: 1px solid red;
+    	float: right;
+    }
+
+}
+
