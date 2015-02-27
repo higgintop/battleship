@@ -1,2 +1,2 @@
-# battleship
-BattleShip game
+# tictactoe
+Tic Tac Toe game using Javascript
