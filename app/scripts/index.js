@@ -5,28 +5,6 @@
 var fbUrl = 'https://battleshipcohort8.firebaseio.com/games';
 var fb = new Firebase('https://battleshipcohort8.firebaseio.com/games');
 
-var newGame = {
-      playerOne: {
-        myBoard: gameBoardsList[0],
-        opponentBoard: gameBoardsList[1],
-        A: 5,
-        B: 4,
-        C: 3,
-        S: 3,
-        D: 2,
-        uid: 0
-    },
-     playerTwo: {
-        myBoard: gameBoardsList[1],
-        opponentBoard: gameBoardsList[0],
-        A: 5,
-        B: 4,
-        C: 3,
-        S: 3,
-        D: 2,
-        uid: 0
-      }
-};
 
 var gameBoardsList =
 [
@@ -55,6 +33,30 @@ var gameBoardsList =
     ['*','*','*','*','*','*','*','*','*','*']
   ]
 ];
+
+var newGame = {
+      playerOne: {
+        myBoard: gameBoardsList[0],
+        opponentBoard: gameBoardsList[1],
+        A: 5,
+        B: 4,
+        C: 3,
+        S: 3,
+        D: 2,
+        uid: 0
+    },
+     playerTwo: {
+        myBoard: gameBoardsList[1],
+        opponentBoard: gameBoardsList[0],
+        A: 5,
+        B: 4,
+        C: 3,
+        S: 3,
+        D: 2,
+        uid: 0
+      }
+};
+
 var game = {
     playerOne: {
         myBoard: gameBoardsList[0],
