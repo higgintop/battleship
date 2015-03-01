@@ -1,5 +1,6 @@
 /* jshint jquery:true */
 'use strict'
+
 var gameBoardsList =
 [
   [
@@ -59,6 +60,10 @@ var game = {
     isPlayerOneTurn: true,
     isGameOver: false
 };
+var ships = gameBoardsList[1].toString(),
+    shipLetters = ['A', 'B', 'C', 'S', 'D'],
+    hitCountDown = [],
+    hitCountDownTotal;
 
 drawGameBoard(game.playerOne.myGuessesBoard, $('.playerOpponentBoard'));
 
@@ -79,33 +84,41 @@ function checkHit(boardToCheck, coord1, coord2, boardToUpdate, playerToHit) {
     switch (boardToCheck[coord1][coord2]) {
         case 'A':
             alert('A was hit! Success!');
-            boardToUpdate[coord1][coord2] = "H";
             playerToHit.A -= 1;
+            scoreIt();
             break;
         case 'B':
             alert('B was hit! Success!');
-            boardToUpdate[coord1][coord2] = "H";
             playerToHit.B -= 1;
+            scoreIt();
             break;
         case 'C':
             alert('C was hit! Success!');
-            boardToUpdate[coord1][coord2] = 'H';
             playerToHit.C -= 1;
+            scoreIt();
             break;
         case 'S':
             alert('S was hit! Success!');
-            boardToUpdate[coord1][coord2] = "H";
             playerToHit.S -= 1;
+            scoreIt();
             break;
         case 'D':
             alert('D was hit! Success!');
-            boardToUpdate[coord1][coord2] = "H";
             playerToHit.D -= 1;
+            scoreIt();
             break;
         default:
             alert('Miss! Try again next time.');
             boardToUpdate[coord1][coord2] = "M";
     }
+    function scoreIt(){
+    	boardToUpdate[coord1][coord2] = "H";
+        //playerToHit.D -= 1;
+        boardToCheck[coord1][coord2] = "H";
+        ships = gameBoardsList[1].toString();
+        hitCountDown = [];
+        hitCount(ships, shipLetters, hitCountDown);
+    };
 }
 
 function drawGameBoard(playerBoard, destination) {
@@ -122,5 +135,25 @@ function drawGameBoard(playerBoard, destination) {
   destination.append($table);
 }
 
+function hitCount(shipString, letter, countArray){
+  var shipCount,
+      shipLetter;
+  for (var i = 0; i < letter.length; i++) {
+    shipLetter = letter[i];
+    shipCount = 0;
+    for (var x = 0; x < shipString.length; x++) {
+      if (shipString[x] === shipLetter) {
+        shipCount++;
+        }
+      }
+      countArray.push(shipCount);
+      console.log(shipCount);
+    }
+    console.log(hitCountDown);
+    hitCountDownTotal = hitCountDown.reduce(function(a, b) {
+      return a + b;
+    });
+    console.log(hitCountDownTotal);
+};
 
 
