@@ -147,15 +147,15 @@ function drawGameBoard(playerBoard, destination) {
     var $tr = $('<tr></tr>');
     _.forEach(row, function(cell) {
         var $td = $('<td>' + cell + '</td>');
-        // if (cell==='*'){
-        //   $td.addClass('blue');
-        // } else if (cell === 'M'){
-        //   $td.addClass('white');
-        // } else if (cell === 'H'){
-        //   $td.addClass('red');
-        // } else {
-        //   $td.addClass('grey');
-        // }
+        if (cell==='*'){
+          $td.addClass('blue');
+        } else if (cell === 'M'){
+          $td.addClass('white');
+        } else if (cell === 'H'){
+          $td.addClass('red');
+        } else {
+          $td.addClass('grey');
+        }
         $tr.append($td);
     });
     $table.append($tr);
