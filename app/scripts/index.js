@@ -51,6 +51,17 @@ var game = {
     playerTwo: {
         myBoard: gameBoardsList[1],
         opponentBoard: gameBoardsList[0],
+        myGuessesBoard: [
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*']
+                        ],
         A: 5,
         B: 4,
         C: 3,
@@ -66,6 +77,7 @@ var ships = gameBoardsList[1].toString(),
     hitCountDownTotal;
 
 drawGameBoard(game.playerOne.myGuessesBoard, $('.playerOpponentBoard'));
+drawGameBoard(game.playerOne.myBoard, $('.playerOwnBoard'));
 
 $('.playerOpponentBoard').on('click', 'td', function() {
     var yCoord = $(this).index();
@@ -76,7 +88,7 @@ $('.playerOpponentBoard').on('click', 'td', function() {
         drawGameBoard(game.playerOne.myGuessesBoard,$('.playerOpponentBoard'));
 
     } else {
-      checkHit(game.playerOne.myBoard, xCoord, yCoord);
+        checkHit(game.playerOne.myBoard, xCoord, yCoord, game.playerTwo.myGuessesBoard, game.playerOne);
     }
 });
 
