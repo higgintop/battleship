@@ -133,54 +133,37 @@ $('.playerOpponentBoard').on('click', 'td', function() {
 function checkHit(boardToCheck, coord1, coord2, boardToUpdate, playerToHit) {
     switch (boardToCheck[coord1][coord2]) {
         case 'A':
-            alert('On target! Hit!');
             playerToHit.A -= 1;
-            if(playerToHit.A === 0){
-               alert('SUNK!!!');
-            }
-            scoreIt();
+            scoreIt(playerToHit.A);
             break;
         case 'B':
-            alert('On target! Hit!');
             playerToHit.B -= 1;
-            scoreIt();
-            if(playerToHit.B === 0){
-               alert('SUNK!!!');
-            }
+            scoreIt(playerToHit.B);
             break;
         case 'C':
-            alert('On target! Hit!');
             playerToHit.C -= 1;
-            if(playerToHit.C === 0){
-               alert('SUNK!!!');
-            }
-            scoreIt();
+            scoreIt(playerToHit.C);
             break;
         case 'S':
-            alert('On target! Hit!');
             playerToHit.S -= 1;
-            if(playerToHit.S === 0){
-               alert('SUNK!!!');
-            }
-            scoreIt();
+            scoreIt(playerToHit.S);
             break;
         case 'D':
-            alert('On target! Hit!');
             playerToHit.D -= 1;
-            if(playerToHit.D === 0){
-               alert('SUNK!!!');
-            }
-            scoreIt();
+            scoreIt(playerToHit.D);
             break;
         default:
             alert('Miss! Try again next time.');
             boardToUpdate[coord1][coord2] = "M";
     }
-    function scoreIt(){
+    function scoreIt(playerHit){
     	boardToUpdate[coord1][coord2] = "H";
         boardToCheck[coord1][coord2] = "H";
         ships = gameBoardsList[1].toString();
         hitCount(ships, shipLetters);
+        if(playerHit === 0){
+            alert('SUNK!!!');
+        }
     };
 }
 
