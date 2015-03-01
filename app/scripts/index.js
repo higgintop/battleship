@@ -218,9 +218,7 @@ function hitCount(shipString, letter){
         shipCount++;
         }
       }
-      if (hitCountDown[i] !== 'E') {
-	      hitCountDown[i] = shipCount;
-	  }
+	  hitCountDown[i] = shipCount;
     }
     hitCountDownTotal = hitCountDown.reduce(function(a, b) {
       return a + b;
