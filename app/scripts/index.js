@@ -131,8 +131,8 @@ function checkHit(boardToCheck, coord1, coord2, boardToUpdate, playerToHit) {
         //playerToHit.D -= 1;
         boardToCheck[coord1][coord2] = "H";
         ships = gameBoardsList[1].toString();
-        hitCountDown = [];
-        hitCount(ships, shipLetters, hitCountDown);
+        //hitCountDown = [];
+        hitCount(ships, shipLetters);
     };
 }
 
@@ -150,9 +150,10 @@ function drawGameBoard(playerBoard, destination) {
   destination.append($table);
 }
 
-function hitCount(shipString, letter, countArray){
+function hitCount(shipString, letter){
   var shipCount,
-      shipLetter;
+      shipLetter,
+      i;
   for (var i = 0; i < letter.length; i++) {
     shipLetter = letter[i];
     shipCount = 0;
@@ -161,7 +162,7 @@ function hitCount(shipString, letter, countArray){
         shipCount++;
         }
       }
-      countArray.push(shipCount);
+      hitCountDown[i] = shipCount;
       console.log(shipCount);
     }
     console.log(hitCountDown);
@@ -169,6 +170,6 @@ function hitCount(shipString, letter, countArray){
       return a + b;
     });
     console.log(hitCountDownTotal);
-};
+}
 
 
