@@ -152,8 +152,7 @@ function drawGameBoard(playerBoard, destination) {
 
 function hitCount(shipString, letter){
   var shipCount,
-      shipLetter,
-      i;
+      shipLetter;
   for (var i = 0; i < letter.length; i++) {
     shipLetter = letter[i];
     shipCount = 0;
@@ -162,14 +161,34 @@ function hitCount(shipString, letter){
         shipCount++;
         }
       }
-      hitCountDown[i] = shipCount;
-      console.log(shipCount);
+      if (hitCountDown[i] !== 'E') {
+	      hitCountDown[i] = shipCount;
+	      console.log(shipCount);
+	  }
     }
     console.log(hitCountDown);
     hitCountDownTotal = hitCountDown.reduce(function(a, b) {
       return a + b;
     });
+    if (hitCountDownTotal === 0) {
+    	alert('Game Over');
+    }
+    //isShipSunk();
     console.log(hitCountDownTotal);
 }
 
+// function isShipSunk(){
+// 	var shipsLeft
+// 	for (var i = 0; i < hitCountDown.length; i++) {
+// 		if (hitCountDown[i] === 0) {
+// 			hitCountDown[i] = 'E';
+// 			alert('Ship Sunk, keep going');
+// 		}
+// 	}
+//	checkGameOver(hitCountDown);
+//}
+
+// function checkGameOver(hits) {
+// 	if (hits.toString() === "EEEEE")
+// }
 
