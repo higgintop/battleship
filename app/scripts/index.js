@@ -98,27 +98,27 @@ $('.playerOpponentBoard').on('click', 'td', function() {
 function checkHit(boardToCheck, coord1, coord2, boardToUpdate, playerToHit) {
     switch (boardToCheck[coord1][coord2]) {
         case 'A':
-            alert('A was hit! Success!');
+            alert('On target! Hit!');
             playerToHit.A -= 1;
             scoreIt();
             break;
         case 'B':
-            alert('B was hit! Success!');
+            alert('On target! Hit!');
             playerToHit.B -= 1;
             scoreIt();
             break;
         case 'C':
-            alert('C was hit! Success!');
+            alert('On target! Hit!');
             playerToHit.C -= 1;
             scoreIt();
             break;
         case 'S':
-            alert('S was hit! Success!');
+            alert('On target! Hit!');
             playerToHit.S -= 1;
             scoreIt();
             break;
         case 'D':
-            alert('D was hit! Success!');
+            alert('On target! Hit!');
             playerToHit.D -= 1;
             scoreIt();
             break;
