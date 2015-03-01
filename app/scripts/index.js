@@ -93,7 +93,10 @@ $('.playerOpponentBoard').on('click', 'td', function() {
     } else {
         checkHit(game.playerOne.myBoard, xCoord, yCoord, game.playerTwo.myGuessesBoard, game.playerOne);
     }
+    switchTurns(game.isPlayerOneTurn);
+    console.log(game.isPlayerOneTurn);
 });
+
 
 function checkHit(boardToCheck, coord1, coord2, boardToUpdate, playerToHit) {
     switch (boardToCheck[coord1][coord2]) {
@@ -171,4 +174,11 @@ function hitCount(shipString, letter, countArray){
     console.log(hitCountDownTotal);
 };
 
+function switchTurns (turnBoolean) {
+  if (turnBoolean) {
+    game.isPlayerOneTurn = false;
+  } else {
+    game.isPlayerOneTurn = true;
+  }
+}
 
