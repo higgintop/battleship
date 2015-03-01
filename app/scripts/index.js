@@ -85,17 +85,19 @@ drawGameBoard(game.playerOne.myBoard, $('.playerOwnBoard'));
 $('.playerOpponentBoard').on('click', 'td', function() {
     var yCoord = $(this).index();
     var xCoord = $(this).closest('tr').index();
-    //$(this).unbind(event);
-    if (game.isPlayerOneTurn) {
-        checkHit(game.playerTwo.myBoard, xCoord, yCoord, game.playerOne.myGuessesBoard, game.playerTwo);
-        drawGameBoard(game.playerOne.myGuessesBoard,$('.playerOpponentBoard'));
-
+    if ($(this).text() !== '*') {
+      alert('This tile has already been guessed. Select another.');
     } else {
-        checkHit(game.playerOne.myBoard, xCoord, yCoord, game.playerTwo.myGuessesBoard, game.playerOne);
-        drawGameBoard(game.playerTwo.myGuessesBoard,$('.playerOpponentBoard'));
+      if (game.isPlayerOneTurn) {
+          checkHit(game.playerTwo.myBoard, xCoord, yCoord, game.playerOne.myGuessesBoard, game.playerTwo);
+          drawGameBoard(game.playerOne.myGuessesBoard,$('.playerOpponentBoard'));
+
+      } else {
+          checkHit(game.playerOne.myBoard, xCoord, yCoord, game.playerTwo.myGuessesBoard, game.playerOne);
+          drawGameBoard(game.playerTwo.myGuessesBoard,$('.playerOpponentBoard'));
+      }
+      //switchTurns(game.isPlayerOneTurn);
     }
-    //switchTurns(game.isPlayerOneTurn);
-    console.log(game.isPlayerOneTurn);
 });
 
 
