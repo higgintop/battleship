@@ -50,6 +50,17 @@ var game = {
     playerTwo: {
         myBoard: gameBoardsList[1],
         opponentBoard: gameBoardsList[0],
+        myGuessesBoard: [
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*']
+                        ],
         A: 5,
         B: 4,
         C: 3,
@@ -71,7 +82,7 @@ $('.playerOpponentBoard').on('click', 'td', function() {
         drawGameBoard(game.playerOne.myGuessesBoard,$('.playerOpponentBoard'));
 
     } else {
-      checkHit(game.playerOne.myBoard, xCoord, yCoord);
+        checkHit(game.playerOne.myBoard, xCoord, yCoord, game.playerTwo.myGuessesBoard, game.playerOne);
     }
 });
 
