@@ -178,10 +178,8 @@ function checkHit(boardToCheck, coord1, coord2, boardToUpdate, playerToHit) {
     }
     function scoreIt(){
     	boardToUpdate[coord1][coord2] = "H";
-        //playerToHit.D -= 1;
         boardToCheck[coord1][coord2] = "H";
         ships = gameBoardsList[1].toString();
-        //hitCountDown = [];
         hitCount(ships, shipLetters);
     };
 }
@@ -222,30 +220,15 @@ function hitCount(shipString, letter){
       }
       if (hitCountDown[i] !== 'E') {
 	      hitCountDown[i] = shipCount;
-	      console.log(shipCount);
 	  }
     }
-    console.log(hitCountDown);
     hitCountDownTotal = hitCountDown.reduce(function(a, b) {
       return a + b;
     });
     if (hitCountDownTotal === 0) {
     	alert('Game Over');
     }
-    //isShipSunk();
-    console.log(hitCountDownTotal);
 }
-
-// function isShipSunk(){
-// 	var shipsLeft
-// 	for (var i = 0; i < hitCountDown.length; i++) {
-// 		if (hitCountDown[i] === 0) {
-// 			hitCountDown[i] = 'E';
-// 			alert('Ship Sunk, keep going');
-// 		}
-// 	}
-//	checkGameOver(hitCountDown);
-//}
 
 
 function switchTurns (turnBoolean) {
