@@ -104,26 +104,41 @@ function checkHit(boardToCheck, coord1, coord2, boardToUpdate, playerToHit) {
         case 'A':
             alert('On target! Hit!');
             playerToHit.A -= 1;
+            if(playerToHit.A === 0){
+               alert('SUNK!!!');
+            }
             scoreIt();
             break;
         case 'B':
             alert('On target! Hit!');
             playerToHit.B -= 1;
             scoreIt();
+            if(playerToHit.B === 0){
+               alert('SUNK!!!');
+            }
             break;
         case 'C':
             alert('On target! Hit!');
             playerToHit.C -= 1;
+            if(playerToHit.C === 0){
+               alert('SUNK!!!');
+            }
             scoreIt();
             break;
         case 'S':
             alert('On target! Hit!');
             playerToHit.S -= 1;
+            if(playerToHit.S === 0){
+               alert('SUNK!!!');
+            }
             scoreIt();
             break;
         case 'D':
             alert('On target! Hit!');
             playerToHit.D -= 1;
+            if(playerToHit.D === 0){
+               alert('SUNK!!!');
+            }
             scoreIt();
             break;
         default:
