@@ -72,6 +72,7 @@ var game = {
 };
 
 drawGameBoard(game.playerOne.myGuessesBoard, $('.playerOpponentBoard'));
+drawGameBoard(game.playerOne.myBoard, $('.playerOwnBoard'));
 
 $('.playerOpponentBoard').on('click', 'td', function() {
     var yCoord = $(this).index();
