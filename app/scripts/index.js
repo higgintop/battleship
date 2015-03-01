@@ -47,7 +47,6 @@ var game = {
         S: 3,
         D: 2
     },
-    
     playerTwo: {
         myBoard: gameBoardsList[1],
         opponentBoard: gameBoardsList[0],
@@ -63,41 +62,54 @@ var game = {
 
 drawGameBoard(game.playerOne.myGuessesBoard, $('.playerOpponentBoard'));
 
-$('.playerOpponentBoard').on('click', 'td', function(event) {
+$('.playerOpponentBoard').on('click', 'td', function() {
     var yCoord = $(this).index();
     var xCoord = $(this).closest('tr').index();
-    $(this).unbind(event);
+    //$(this).unbind(event);
     if (game.isPlayerOneTurn) {
-      checkHit(game.playerTwo.myBoard, xCoord, yCoord);
+        checkHit(game.playerTwo.myBoard, xCoord, yCoord, game.playerOne.myGuessesBoard, game.playerTwo);
+        drawGameBoard(game.playerOne.myGuessesBoard,$('.playerOpponentBoard'));
+
     } else {
       checkHit(game.playerOne.myBoard, xCoord, yCoord);
     }
 });
 
-function checkHit(boardToCheck, coord1, coord2) {
+function checkHit(boardToCheck, coord1, coord2, boardToUpdate, playerToHit) {
     switch (boardToCheck[coord1][coord2]) {
         case 'A':
-          alert('A was hit! Success!');
-          break;
+            alert('A was hit! Success!');
+            boardToUpdate[coord1][coord2] = "H";
+            playerToHit.A -= 1;
+            break;
         case 'B':
-          alert('B was hit! Success!');
-          break;
+            alert('B was hit! Success!');
+            boardToUpdate[coord1][coord2] = "H";
+            playerToHit.B -= 1;
+            break;
         case 'C':
-          alert('C was hit! Success!');
-          break;
+            alert('C was hit! Success!');
+            boardToUpdate[coord1][coord2] = 'H';
+            playerToHit.C -= 1;
+            break;
         case 'S':
-          alert('S was hit! Success!');
-          break;
+            alert('S was hit! Success!');
+            boardToUpdate[coord1][coord2] = "H";
+            playerToHit.S -= 1;
+            break;
         case 'D':
-          alert('D was hit! Success!');
-          break;
+            alert('D was hit! Success!');
+            boardToUpdate[coord1][coord2] = "H";
+            playerToHit.D -= 1;
+            break;
         default:
-          alert('Miss! Try again next time.');
-
+            alert('Miss! Try again next time.');
+            boardToUpdate[coord1][coord2] = "M";
     }
 }
 
 function drawGameBoard(playerBoard, destination) {
+  destination.empty();
   var $table = $('<table class="table table-bordered game_board"></table>');
   _.forEach(playerBoard, function(row){
     var $tr = $('<tr></tr>');
@@ -107,7 +119,6 @@ function drawGameBoard(playerBoard, destination) {
     });
     $table.append($tr);
   });
-
   destination.append($table);
 }
 
