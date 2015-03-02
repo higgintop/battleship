@@ -210,6 +210,9 @@ function switchTurns (turnBoolean) {
 // On click of Join Game
 $('body').on('click', '#join-game', function(event) {
   $('form').addClass('hidden');
+  $('.statusBoard').removeClass('hidden');
+  $('.turnTracker').removeClass('hidden');
+
  event.preventDefault();
 
  var needAGame = false;
