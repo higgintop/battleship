@@ -56,7 +56,9 @@ var newGame = {
         C: 3,
         S: 3,
         D: 2,
-        uid: 0
+        uid: 0,
+        hitCountDown:[],
+        hitCountDownTotal: ''
     },
      playerTwo: {
         myBoard: gameBoardsList[1],
@@ -78,15 +80,12 @@ var newGame = {
         C: 3,
         S: 3,
         D: 2,
-        uid: 0
+        uid: 0,
+        hitCountDown:[],
+        hitCountDownTotal: ''
       },
     isPlayerOneTurn: true
 };
-
-var ships = gameBoardsList[1].toString(),
-    shipLetters = ['A', 'B', 'C', 'S', 'D'],
-    hitCountDown = [],
-    hitCountDownTotal;
 
 drawGameBoard(newGame.playerOne.myGuessesBoard, $('.playerOpponentBoard'));
 drawGameBoard(newGame.playerOne.myBoard, $('.playerOwnBoard'));
@@ -138,10 +137,13 @@ function checkHit(boardToCheck, coord1, coord2, boardToUpdate, playerToHit) {
             boardToUpdate[coord1][coord2] = "M";
     }
     function scoreIt(playerHit){
+    	var ships = boardToCheck.toString(),
+            shipLetters = ['A', 'B', 'C', 'S', 'D'];
+            //countDown = playerToHit.hitCountDown,
+            //countDownTotal = playerToHit.hitCountDownTotal;
     	boardToUpdate[coord1][coord2] = "H";
         boardToCheck[coord1][coord2] = "H";
-        ships = gameBoardsList[1].toString();
-        hitCount(ships, shipLetters);
+        hitCount(ships, shipLetters, playerToHit);
         if(playerHit === 0){
             alert('SUNK!!!');
         }
@@ -171,7 +173,7 @@ function drawGameBoard(playerBoard, destination) {
   destination.append($table);
 }
 
-function hitCount(shipString, letter){
+function hitCount(shipString, letter, playerToHit){
   var shipCount,
       shipLetter;
   for (var i = 0; i < letter.length; i++) {
@@ -182,14 +184,12 @@ function hitCount(shipString, letter){
         shipCount++;
         }
       }
-      if (hitCountDown[i] !== 'E') {
-	      hitCountDown[i] = shipCount;
-	  }
+	  playerToHit.hitCountDown[i] = shipCount;
     }
-    hitCountDownTotal = hitCountDown.reduce(function(a, b) {
+    playerToHit.hitCountDownTotal = playerToHit.hitCountDown.reduce(function(a, b) {
       return a + b;
     });
-    if (hitCountDownTotal === 0) {
+    if (playerToHit.hitCountDownTotal === 1) {
     	alert('Game Over');
     }
 }
