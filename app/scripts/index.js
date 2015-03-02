@@ -57,7 +57,7 @@ var newGame = {
         S: 3,
         D: 2,
         uid: 0,
-        hitCountDown:[],
+        hitCountDown:[0,0,0,0,0],
         hitCountDownTotal: ''
     },
      playerTwo: {
@@ -81,20 +81,16 @@ var newGame = {
         S: 3,
         D: 2,
         uid: 0,
-        hitCountDown:[],
+        hitCountDown:[0,0,0,0,0],
         hitCountDownTotal: ''
       },
     isPlayerOneTurn: true
 };
 
 
-/*if(firebaseToUpdate){
-  console.log('here');
-  firebaseToUpdate.on('value', function(snap) {
-    console.log('a change occurred', snap.val());
-
-  });
-}*/
+if (firebaseToUpdate) {
+  watchFirebaseForChange();
+}
 
 
 if (newGame.playerOne !== 0) {
@@ -111,24 +107,14 @@ $('.playerOpponentBoard').on('click', 'td', function() {
     } else {
       if (newGame.isPlayerOneTurn) {
           checkHit(newGame.playerTwo.myBoard, xCoord, yCoord, newGame.playerOne.myGuessesBoard, newGame.playerTwo);
-          //drawGameBoard(newGame.playerOne.myGuessesBoard,$('.playerOpponentBoard'));
-
       } else {
           checkHit(newGame.playerOne.myBoard, xCoord, yCoord, newGame.playerTwo.myGuessesBoard, newGame.playerOne);
-          //drawGameBoard(newGame.playerTwo.myGuessesBoard,$('.playerOpponentBoard'));
       }
       switchTurns(newGame.isPlayerOneTurn);
     }
     firebaseToUpdate.set(newGame);
-    drawGameBoard(newGame.playerOne.myGuessesBoard,$('.playerOpponentBoard'));
-    drawGameBoard(newGame.playerTwo.myGuessesBoard,$('.playerOpponentBoard'));
-    drawGameBoard(newGame.playerOne.myBoard,$('.playerOwnBoard'));
-    drawGameBoard(newGame.playerTwo.myBoard,$('.playerOwnBoard'));
-
-
+    watchFirebaseForChange();
 });
-
-
 
 function checkHit(boardToCheck, coord1, coord2, boardToUpdate, playerToHit) {
     switch (boardToCheck[coord1][coord2]) {
@@ -204,6 +190,9 @@ function hitCount(shipString, letter, playerToHit){
         shipCount++;
         }
       }
+    console.log(playerToHit);
+    console.log(playerToHit.hitCountDown);
+    console.log(playerToHit.hitCountDown[0]);
 	  playerToHit.hitCountDown[i] = shipCount;
     }
     playerToHit.hitCountDownTotal = playerToHit.hitCountDown.reduce(function(a, b) {
@@ -213,7 +202,6 @@ function hitCount(shipString, letter, playerToHit){
     	alert('Game Over');
     }
 }
-
 
 function switchTurns (turnBoolean) {
   if (turnBoolean) {
@@ -269,6 +257,7 @@ $('body').on('click', '#join-game', function(event) {
               $('.statusBoard').empty();
               $('.statusBoard').append('<div>You are player1.</div>');
          }
+         watchFirebaseForChange();
       });
     }
     else {
@@ -290,6 +279,7 @@ $('body').on('click', '#join-game', function(event) {
               $('.statusBoard').empty();
               $('.statusBoard').append('<div>You are player1.</div>');
             }
+            watchFirebaseForChange();
           });
         }
           else if(games[uuid].playerTwo.uid === 0) {
@@ -307,6 +297,7 @@ $('body').on('click', '#join-game', function(event) {
                   $('.statusBoard').empty();
                   $('.statusBoard').append('<div>You are player2.</div>');
                 }
+                watchFirebaseForChange();
              });
           }
         }); // Object.keys
@@ -341,7 +332,19 @@ function findMyGame (callback) {
 
 
 
-
+function watchFirebaseForChange () {
+  firebaseToUpdate.on('value', function(currentGame) {
+    console.log('updating game based on firebase!');
+    newGame=currentGame.val();
+    if (fb.getAuth().uid === newGame.playerOne.uid) {
+    drawGameBoard(newGame.playerOne.myGuessesBoard,$('.playerOpponentBoard'));
+    drawGameBoard(newGame.playerOne.myBoard,$('.playerOwnBoard'));
+  } else if (fb.getAuth().uid === newGame.playerTwo.uid){
+    drawGameBoard(newGame.playerTwo.myGuessesBoard,$('.playerOpponentBoard'));
+    drawGameBoard(newGame.playerTwo.myBoard,$('.playerOwnBoard'));
+    }
+  });
+}
 
 
 
