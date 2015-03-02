@@ -340,9 +340,19 @@ function watchFirebaseForChange () {
     drawGameBoard(newGame.playerTwo.myGuessesBoard,$('.playerOpponentBoard'));
     drawGameBoard(newGame.playerTwo.myBoard,$('.playerOwnBoard'));
     }
+    showTurn();
   });
 }
 
+
+function showTurn() {
+  $('.turnTracker').empty();
+  if (newGame.isPlayerOneTurn){
+    $('.turnTracker').append('<div>Player One\'s Turn</div>');
+  } else {
+    $('.turnTracker').append('<div>Player Two\'s Turn</div>');
+  }
+}
 
 
 
