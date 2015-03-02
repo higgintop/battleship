@@ -16,9 +16,10 @@ html(lang='en-US')
           input(type="text", placeholder="What is your name?", id='name')
           button(type="submit", class="btn btn-default", id="join-game") Play Game
         .statusBoard
-        .gameBoardContainer
-          .playerOwnBoard.hidden myboard
-          .playerOpponentBoard.hidden opponentboard
+        .gameContainer.hidden
+          .turnTracker It is Player One's Turn
+          .playerOwnBoard myboard
+          .playerOpponentBoard opponentboard
 
 
 

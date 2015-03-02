@@ -93,11 +93,6 @@ if (firebaseToUpdate) {
 }
 
 
-if (newGame.playerOne !== 0) {
-  $('.playerOwnBoard').removeClass('.hidden');
-  $('.playerOpponentBoard').removeClass('.hidden');
-}
-
 
 $('.playerOpponentBoard').on('click', 'td', function() {
     var yCoord = $(this).index();
@@ -212,6 +207,7 @@ function switchTurns (turnBoolean) {
   } else {
     newGame.isPlayerOneTurn = true;
   }
+
 }
 
 
@@ -224,6 +220,7 @@ function switchTurns (turnBoolean) {
 
 // On click of Join Game
 $('body').on('click', '#join-game', function(event) {
+  $('form').addClass('hidden');
  event.preventDefault();
 
  var needAGame = false;
@@ -255,8 +252,7 @@ $('body').on('click', '#join-game', function(event) {
          if (fb.getAuth().uid===playerId) {
             drawGameBoard(newGame.playerOne.myGuessesBoard, $('.playerOpponentBoard'));
             drawGameBoard(newGame.playerOne.myBoard, $('.playerOwnBoard'));
-              $('.playerOpponentBoard').removeClass('hidden');
-              $('.playerOwnBoard').removeClass('hidden');
+              $('.gameContainer').removeClass('hidden');
               $('.statusBoard').empty();
               $('.statusBoard').append('<div>You are player1.</div>');
          }
@@ -277,8 +273,7 @@ $('body').on('click', '#join-game', function(event) {
                 if (fb.getAuth().uid===playerId) {
             drawGameBoard(newGame.playerOne.myGuessesBoard, $('.playerOpponentBoard'));
             drawGameBoard(newGame.playerOne.myBoard, $('.playerOwnBoard'));
-              $('.playerOpponentBoard').removeClass('hidden');
-              $('.playerOwnBoard').removeClass('hidden');
+              $('.gameContainer').removeClass('hidden');
               $('.statusBoard').empty();
               $('.statusBoard').append('<div>You are player1.</div>');
             }
@@ -295,8 +290,7 @@ $('body').on('click', '#join-game', function(event) {
                 if (fb.getAuth().uid===playerId) {
                   drawGameBoard(newGame.playerTwo.myGuessesBoard, $('.playerOpponentBoard'));
                   drawGameBoard(newGame.playerTwo.myBoard, $('.playerOwnBoard'));
-                  $('.playerOpponentBoard').removeClass('hidden');
-                  $('.playerOwnBoard').removeClass('hidden');
+                  $('.gameContainer').removeClass('hidden');
                   $('.statusBoard').empty();
                   $('.statusBoard').append('<div>You are player2.</div>');
                 }
