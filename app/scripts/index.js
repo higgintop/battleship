@@ -105,12 +105,15 @@ $('.playerOpponentBoard').on('click', 'td', function() {
     if ($(this).text() !== '*') {
       alert('This tile has already been guessed. Select another.');
     } else {
-      if (newGame.isPlayerOneTurn) {
+      if (newGame.isPlayerOneTurn && (newGame.playerOne.uid === fb.getAuth().uid)) {
           checkHit(newGame.playerTwo.myBoard, xCoord, yCoord, newGame.playerOne.myGuessesBoard, newGame.playerTwo);
-      } else {
+          switchTurns(newGame.isPlayerOneTurn);
+      } else if (!newGame.isPlayerOneTurn && (newGame.playerTwo.uid === fb.getAuth().uid)){
           checkHit(newGame.playerOne.myBoard, xCoord, yCoord, newGame.playerTwo.myGuessesBoard, newGame.playerOne);
+          switchTurns(newGame.isPlayerOneTurn);
+      } else {
+        alert('not your turn');
       }
-      switchTurns(newGame.isPlayerOneTurn);
     }
     firebaseToUpdate.set(newGame);
     watchFirebaseForChange();
