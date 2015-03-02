@@ -344,5 +344,171 @@ function showTurn() {
   }
 }
 
+  var cleanBoard =      [ ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'] ];
+
+
+function placeShips() {
+
+
+    // draw the board and append to placeShipsContainer
+    drawGameBoard(cleanBoard, $('.placeShipsContainer'));
+  
+}
+
+
+var ships = [
+
+  {name: 'A',
+  spaces: 5,
+  orientation: 'horizontal'}, 
+  {name: 'B',
+  spaces: 4,
+  orientation: 'horizontal'},
+  {name: 'C',
+  spaces: 3,
+  orientation: 'horizontal'},
+  {name: 'S',
+  spaces: 3,
+  orientation: 'horizontal'},
+  {name: 'D',
+  spaces: 2,
+  orientation: 'horizontal'}
+
+];
+
+
+
+$('.rotateBtn').on('click', function(){
+  if(ships[0].orientation === 'horizontal'){
+    ships[0].orientation = 'vertical';
+  } else {
+    ships[0].orientation = 'horizontal'
+  }
+});
+
+$('.placeShipsContainer').on('mouseover', 'td', function(){
+    var yCoord = $(this).index();
+    var xCoord = $(this).closest('tr').index();
+    
+    // the xCoord, yCoord is the start or 'head' of the ship
+    if(ships[0].orientation === 'horizontal') {
+      var space = $(this);
+      space.css('background-color', 'lightgrey');
+      for (var i=0; i < ships[0].spaces-1; i++){
+        space = space.next();
+        space.css('background-color', 'lightgrey');
+      }
+
+    } else if (ships[0].orientation === 'vertical') {
+      var spacesLeft = $(this).parent().nextAll();
+
+      $(this).css('background-color', 'lightgrey');
+      var nextRow;
+      for (var i=0; i < ships[0].spaces-1; i++){
+        nextRow = spacesLeft[i];
+        $(nextRow).find('td').eq(yCoord).css('background-color', 'lightgrey');
+      }
+    }
+
+});
+
+$('.placeShipsContainer').on('mouseleave', 'td', function(){
+    var yCoord = $(this).index();
+    var xCoord = $(this).closest('tr').index();
+    $(this).css('background-color', 'turquoise');
+
+    if(ships[0].orientation === 'horizontal') {
+      var space = $(this);
+      space.css('background-color', 'turquoise');
+      for (var i=0; i < ships[0].spaces-1; i++){
+        space = space.next();
+        space.css('background-color', 'turquoise');
+      }
+
+    } else if (ships[0].orientation === 'vertical') {
+      var spacesLeft = $(this).parent().nextAll();
+
+      $(this).css('background-color', 'turquoise');
+      var nextRow;
+      for (var i=0; i < ships[0].spaces-1; i++){
+        nextRow = spacesLeft[i];
+        $(nextRow).find('td').eq(yCoord).css('background-color', 'turquoise');
+      }
+    }
+});
+
+$('.placeShipsContainer').on('click', 'td', function(){
+    var col = $(this).index();
+    var row = $(this).closest('tr').index();
+    console.log(row, col);
+    
+
+    // logic to see if this is a valid click
+    if (cleanBoard[row][col] === '*'){
+      if (ships[0].orientation === 'horizontal'){
+        placeHorizontalShip(row, col);
+      }
+    } else {
+      alert('invalid placement');
+    }
+});
+
+function placeHorizontalShip(row, col){
+   // check cleanBoard for cells right of where we are
+   var isValid = true;
+
+   for(var i=1; i < ships[0].spaces; i++){
+    console.log(cleanBoard[row][col+i]);
+    if(cleanBoard[row][col + i] !== '*'){
+      isValid = false;
+      alert('invalid placement');
+    } 
+   }
+
+   if(isValid){
+    for(var i=0; i < ships[0].spaces; i++){
+      cleanBoard[row][col + i] = ships[0].name;
+     }
+     placeShips();
+
+     // update ship
+     ships.shift();
+     if(!ships[0]) {
+      alert('DONE');
+     }
+
+
+   }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
