@@ -88,11 +88,6 @@ var newGame = {
 };
 
 
-var ships = gameBoardsList[1].toString(),
-    shipLetters = ['A', 'B', 'C', 'S', 'D'],
-    hitCountDown = [],
-    hitCountDownTotal;
-
 /*if(firebaseToUpdate){
   console.log('here');
   firebaseToUpdate.on('value', function(snap) {
