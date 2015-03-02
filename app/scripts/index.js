@@ -97,9 +97,11 @@ var newGame = {
 }*/
 
 
+if (newGame.playerOne !== 0) {
+  $('.playerOwnBoard').removeClass('.hidden');
+  $('.playerOpponentBoard').removeClass('.hidden');
+}
 
-drawGameBoard(newGame.playerOne.myGuessesBoard, $('.playerOpponentBoard'));
-drawGameBoard(newGame.playerOne.myBoard, $('.playerOwnBoard'));
 
 $('.playerOpponentBoard').on('click', 'td', function() {
     var yCoord = $(this).index();
@@ -258,41 +260,55 @@ $('body').on('click', '#join-game', function(event) {
       newGame.gameName=gameId.key();
       gameId.set(newGame);
       findMyGame(function(theGame) {
-         console.log('You are player one with id ', playerId );
-         console.log('myGame is now ' + myGame);
          firebaseToUpdate = new Firebase(fbUrl + '/' + myGame);
+         if (fb.getAuth().uid===playerId) {
+            drawGameBoard(newGame.playerOne.myGuessesBoard, $('.playerOpponentBoard'));
+            drawGameBoard(newGame.playerOne.myBoard, $('.playerOwnBoard'));
+              $('.playerOpponentBoard').removeClass('hidden');
+              $('.playerOwnBoard').removeClass('hidden');
+              $('.statusBoard').empty();
+              $('.statusBoard').append('<div>You are player1.</div>');
+         }
       });
     }
     else {
       // check those games
        Object.keys(games).forEach(function (uuid) {
-
           var gameUrl = fbUrl + '/' + uuid;
           var gameFb = new Firebase(gameUrl);
-
           if(games[uuid].playerOne.uid === 0){
              var updatedGame = games[uuid];
              updatedGame.playerOne.uid = playerId;
              gameFb.set(updatedGame);
              findMyGame(function(theGame) {
-                console.log('You are player one with id ', playerId );
-                console.log('myGame is now ' + myGame);
                 firebaseToUpdate = new Firebase(fbUrl + '/' + myGame);
-              });
-          }
-
+                if (fb.getAuth().uid===playerId) {
+            drawGameBoard(newGame.playerOne.myGuessesBoard, $('.playerOpponentBoard'));
+            drawGameBoard(newGame.playerOne.myBoard, $('.playerOwnBoard'));
+              $('.playerOpponentBoard').removeClass('hidden');
+              $('.playerOwnBoard').removeClass('hidden');
+              $('.statusBoard').empty();
+              $('.statusBoard').append('<div>You are player1.</div>');
+            }
+          });
+        }
           else if(games[uuid].playerTwo.uid === 0) {
              var updatedGame = games[uuid];
              updatedGame.playerTwo.uid = playerId;
              gameFb.set(updatedGame);
              needAGame = true;
              findMyGame(function(theGame) {
-                console.log('You are player Two with id ', playerId );
-                console.log('myGame is now ' + myGame);
                 firebaseToUpdate = new Firebase(fbUrl + '/' + myGame);
+                if (fb.getAuth().uid===playerId) {
+                  drawGameBoard(newGame.playerTwo.myGuessesBoard, $('.playerOpponentBoard'));
+                  drawGameBoard(newGame.playerTwo.myBoard, $('.playerOwnBoard'));
+                  $('.playerOpponentBoard').removeClass('hidden');
+                  $('.playerOwnBoard').removeClass('hidden');
+                  $('.statusBoard').empty();
+                  $('.statusBoard').append('<div>You are player2.</div>');
+                }
              });
           }
-
         }); // Object.keys
 
        if(needAGame){
@@ -309,7 +325,6 @@ $('body').on('click', '#join-game', function(event) {
   });
 });
 
-
 function findMyGame (callback) {
   fb.once('value', function(snap) {
     var gameList = snap.val();
@@ -323,7 +338,6 @@ function findMyGame (callback) {
     })
   });
 };
-
 
 
 

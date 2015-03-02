@@ -15,10 +15,10 @@ html(lang='en-US')
         form
           input(type="text", placeholder="What is your name?", id='name')
           button(type="submit", class="btn btn-default", id="join-game") Play Game
-
+        .statusBoard
         .gameBoardContainer
-          .playerOwnBoard myboard
-          .playerOpponentBoard opponentboard
+          .playerOwnBoard.hidden myboard
+          .playerOpponentBoard.hidden opponentboard
 
 
 
