@@ -88,6 +88,15 @@ var ships = gameBoardsList[1].toString(),
     hitCountDown = [],
     hitCountDownTotal;
 
+/*if(firebaseToUpdate){
+  console.log('here');
+  firebaseToUpdate.on('value', function(snap) {
+    console.log('a change occurred', snap.val());
+
+  });
+}*/
+
+
 drawGameBoard(newGame.playerOne.myGuessesBoard, $('.playerOpponentBoard'));
 drawGameBoard(newGame.playerOne.myBoard, $('.playerOwnBoard'));
 
@@ -99,16 +108,23 @@ $('.playerOpponentBoard').on('click', 'td', function() {
     } else {
       if (newGame.isPlayerOneTurn) {
           checkHit(newGame.playerTwo.myBoard, xCoord, yCoord, newGame.playerOne.myGuessesBoard, newGame.playerTwo);
-          drawGameBoard(newGame.playerOne.myGuessesBoard,$('.playerOpponentBoard'));
+          //drawGameBoard(newGame.playerOne.myGuessesBoard,$('.playerOpponentBoard'));
 
       } else {
           checkHit(newGame.playerOne.myBoard, xCoord, yCoord, newGame.playerTwo.myGuessesBoard, newGame.playerOne);
-          drawGameBoard(newGame.playerTwo.myGuessesBoard,$('.playerOpponentBoard'));
+          //drawGameBoard(newGame.playerTwo.myGuessesBoard,$('.playerOpponentBoard'));
       }
       switchTurns(newGame.isPlayerOneTurn);
     }
     firebaseToUpdate.set(newGame);
+    drawGameBoard(newGame.playerOne.myGuessesBoard,$('.playerOpponentBoard'));
+    drawGameBoard(newGame.playerTwo.myGuessesBoard,$('.playerOpponentBoard'));
+    drawGameBoard(newGame.playerOne.myBoard,$('.playerOwnBoard'));
+    drawGameBoard(newGame.playerTwo.myBoard,$('.playerOwnBoard'));
+
+
 });
+
 
 
 function checkHit(boardToCheck, coord1, coord2, boardToUpdate, playerToHit) {
