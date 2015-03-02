@@ -255,9 +255,11 @@ $('body').on('click', '#join-game', function(event) {
       gameId = fb.push();
       newGame.gameName=gameId.key();
       gameId.set(newGame);
-      findMyGame();
-      console.log('myGame is now ' + myGame);
-      firebaseToUpdate = new Firebase(fbUrl + '/' + myGame);
+      findMyGame(function(theGame) {
+         console.log('You are player one with id ', playerId );
+         console.log('myGame is now ' + myGame);
+         firebaseToUpdate = new Firebase(fbUrl + '/' + myGame);
+      });
     }
     else {
       // check those games
@@ -270,9 +272,11 @@ $('body').on('click', '#join-game', function(event) {
              var updatedGame = games[uuid];
              updatedGame.playerOne.uid = playerId;
              gameFb.set(updatedGame);
-             findMyGame();
-             console.log('myGame is now ' + myGame);
-             firebaseToUpdate = new Firebase(fbUrl + '/' + myGame);
+             findMyGame(function(theGame) {
+                console.log('You are player one with id ', playerId );
+                console.log('myGame is now ' + myGame);
+                firebaseToUpdate = new Firebase(fbUrl + '/' + myGame);
+              });
           }
 
           else if(games[uuid].playerTwo.uid === 0) {
@@ -280,14 +284,18 @@ $('body').on('click', '#join-game', function(event) {
              updatedGame.playerTwo.uid = playerId;
              gameFb.set(updatedGame);
              needAGame = true;
-             findMyGame();
-             console.log('myGame is now ' + myGame);
-             firebaseToUpdate = new Firebase(fbUrl + '/' + myGame);
+             findMyGame(function(theGame) {
+                console.log('You are player Two with id ', playerId );
+                console.log('myGame is now ' + myGame);
+                firebaseToUpdate = new Firebase(fbUrl + '/' + myGame);
+             });
           }
 
         }); // Object.keys
 
        if(needAGame){
+         newGame.playerOne.uid = 0;
+         newGame.playerTwo.uid = 0;
          var gameId = fb.push();
          newGame.gameName=gameId.key();
          gameId.set(newGame);
@@ -300,15 +308,25 @@ $('body').on('click', '#join-game', function(event) {
 });
 
 
-function findMyGame () {
-fb.once('value', function(snap) {
-  var gameList = snap.val();
-  console.log(gameList);
-_.forEach(gameList, function(game) {
-  if (fb.getAuth().uid === game.playerOne.uid ||
-      fb.getAuth().uid === game.playerTwo.uid) {
-      myGame = game.gameName;
-   }
-  })
-});
+function findMyGame (callback) {
+  fb.once('value', function(snap) {
+    var gameList = snap.val();
+    console.log(gameList);
+  _.forEach(gameList, function(game) {
+    if (fb.getAuth().uid === game.playerOne.uid ||
+        fb.getAuth().uid === game.playerTwo.uid) {
+        myGame = game.gameName;
+        callback(myGame);
+     }
+    })
+  });
 };
+
+
+
+
+
+
+
+
+
