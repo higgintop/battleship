@@ -33,11 +33,24 @@ var gameBoardsList =
     ['*','*','*','*','*','*','*','*','*','*']
   ]
 ];
-
+var myGame;
+var firebaseToUpdate;
 var newGame = {
       playerOne: {
         myBoard: gameBoardsList[0],
         opponentBoard: gameBoardsList[1],
+        myGuessesBoard: [
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*']
+                        ],
         A: 5,
         B: 4,
         C: 3,
@@ -48,68 +61,35 @@ var newGame = {
      playerTwo: {
         myBoard: gameBoardsList[1],
         opponentBoard: gameBoardsList[0],
+        myGuessesBoard: [
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*']
+                        ],
         A: 5,
         B: 4,
         C: 3,
         S: 3,
         D: 2,
         uid: 0
-      }
+      },
+    isPlayerOneTurn: true
 };
 
-var game = {
-    playerOne: {
-        myBoard: gameBoardsList[0],
-        opponentBoard: gameBoardsList[1],
-        myGuessesBoard: [
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*']
-                        ],
-        A: 5,
-        B: 4,
-        C: 3,
-        S: 3,
-        D: 2
-    },
-    playerTwo: {
-        myBoard: gameBoardsList[1],
-        opponentBoard: gameBoardsList[0],
-        myGuessesBoard: [
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*']
-                        ],
-        A: 5,
-        B: 4,
-        C: 3,
-        S: 3,
-        D: 2
-    },
-    isPlayerOneTurn: true,
-    isGameOver: false
-};
 var ships = gameBoardsList[1].toString(),
     shipLetters = ['A', 'B', 'C', 'S', 'D'],
     hitCountDown = [],
     hitCountDownTotal;
 
-drawGameBoard(game.playerOne.myGuessesBoard, $('.playerOpponentBoard'));
-drawGameBoard(game.playerOne.myBoard, $('.playerOwnBoard'));
+drawGameBoard(newGame.playerOne.myGuessesBoard, $('.playerOpponentBoard'));
+drawGameBoard(newGame.playerOne.myBoard, $('.playerOwnBoard'));
 
 $('.playerOpponentBoard').on('click', 'td', function() {
     var yCoord = $(this).index();
@@ -117,16 +97,17 @@ $('.playerOpponentBoard').on('click', 'td', function() {
     if ($(this).text() !== '*') {
       alert('This tile has already been guessed. Select another.');
     } else {
-      if (game.isPlayerOneTurn) {
-          checkHit(game.playerTwo.myBoard, xCoord, yCoord, game.playerOne.myGuessesBoard, game.playerTwo);
-          drawGameBoard(game.playerOne.myGuessesBoard,$('.playerOpponentBoard'));
+      if (newGame.isPlayerOneTurn) {
+          checkHit(newGame.playerTwo.myBoard, xCoord, yCoord, newGame.playerOne.myGuessesBoard, newGame.playerTwo);
+          drawGameBoard(newGame.playerOne.myGuessesBoard,$('.playerOpponentBoard'));
 
       } else {
-          checkHit(game.playerOne.myBoard, xCoord, yCoord, game.playerTwo.myGuessesBoard, game.playerOne);
-          drawGameBoard(game.playerTwo.myGuessesBoard,$('.playerOpponentBoard'));
+          checkHit(newGame.playerOne.myBoard, xCoord, yCoord, newGame.playerTwo.myGuessesBoard, newGame.playerOne);
+          drawGameBoard(newGame.playerTwo.myGuessesBoard,$('.playerOpponentBoard'));
       }
-      //switchTurns(game.isPlayerOneTurn);
+      switchTurns(newGame.isPlayerOneTurn);
     }
+    firebaseToUpdate.set(newGame);
 });
 
 
@@ -222,10 +203,8 @@ function hitCount(shipString, letter){
       }
       if (hitCountDown[i] !== 'E') {
 	      hitCountDown[i] = shipCount;
-	      console.log(shipCount);
 	  }
     }
-    console.log(hitCountDown);
     hitCountDownTotal = hitCountDown.reduce(function(a, b) {
       return a + b;
     });
@@ -233,7 +212,6 @@ function hitCount(shipString, letter){
     	alert('Game Over');
     }
     //isShipSunk();
-    console.log(hitCountDownTotal);
 }
 
 // function isShipSunk(){
@@ -250,9 +228,9 @@ function hitCount(shipString, letter){
 
 function switchTurns (turnBoolean) {
   if (turnBoolean) {
-    game.isPlayerOneTurn = false;
+    newGame.isPlayerOneTurn = false;
   } else {
-    game.isPlayerOneTurn = true;
+    newGame.isPlayerOneTurn = true;
   }
 }
 
@@ -289,9 +267,13 @@ $('body').on('click', '#join-game', function(event) {
     // if no games exist in firebase
     if (games === null){
       newGame.playerOne.uid = playerId;
-      fb.push(newGame);
-
-    } 
+      gameId = fb.push();
+      newGame.gameName=gameId.key();
+      gameId.set(newGame);
+      findMyGame();
+      console.log('myGame is now ' + myGame);
+      firebaseToUpdate = new Firebase(fbUrl + '/' + myGame);
+    }
     else {
       // check those games
        Object.keys(games).forEach(function (uuid) {
@@ -303,6 +285,9 @@ $('body').on('click', '#join-game', function(event) {
              var updatedGame = games[uuid];
              updatedGame.playerOne.uid = playerId;
              gameFb.set(updatedGame);
+             findMyGame();
+             console.log('myGame is now ' + myGame);
+             firebaseToUpdate = new Firebase(fbUrl + '/' + myGame);
           }
 
           else if(games[uuid].playerTwo.uid === 0) {
@@ -310,12 +295,17 @@ $('body').on('click', '#join-game', function(event) {
              updatedGame.playerTwo.uid = playerId;
              gameFb.set(updatedGame);
              needAGame = true;
+             findMyGame();
+             console.log('myGame is now ' + myGame);
+             firebaseToUpdate = new Firebase(fbUrl + '/' + myGame);
           }
 
         }); // Object.keys
 
        if(needAGame){
-         fb.push(newGame);
+         var gameId = fb.push();
+         newGame.gameName=gameId.key();
+         gameId.set(newGame);
        }
 
       }
@@ -325,3 +315,15 @@ $('body').on('click', '#join-game', function(event) {
 });
 
 
+function findMyGame () {
+fb.once('value', function(snap) {
+  var gameList = snap.val();
+  console.log(gameList);
+_.forEach(gameList, function(game) {
+  if (fb.getAuth().uid === game.playerOne.uid ||
+      fb.getAuth().uid === game.playerTwo.uid) {
+      myGame = game.gameName;
+   }
+  })
+});
+};
