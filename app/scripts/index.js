@@ -5,7 +5,6 @@
 var fbUrl = 'https://battleshipcohort8.firebaseio.com/games';
 var fb = new Firebase('https://battleshipcohort8.firebaseio.com/games');
 
-
 var gameBoardsList =
 [
   [
@@ -87,12 +86,9 @@ var newGame = {
     isPlayerOneTurn: true
 };
 
-
 if (firebaseToUpdate) {
   watchFirebaseForChange();
 }
-
-
 
 $('.playerOpponentBoard').on('click', 'td', function() {
     var yCoord = $(this).index();
@@ -139,6 +135,7 @@ function checkHit(boardToCheck, coord1, coord2, boardToUpdate, playerToHit) {
         default:
             alert('Miss! Try again next time.');
             boardToUpdate[coord1][coord2] = "M";
+            boardToCheck[coord1][coord2] = "M";
     }
     function scoreIt(playerHit){
     	var ships = boardToCheck.toString(),
@@ -209,14 +206,6 @@ function switchTurns (turnBoolean) {
   }
 
 }
-
-
-
-
-
-
-
-
 
 // On click of Join Game
 $('body').on('click', '#join-game', function(event) {
@@ -326,8 +315,6 @@ function findMyGame (callback) {
     })
   });
 };
-
-
 
 function watchFirebaseForChange () {
   firebaseToUpdate.on('value', function(currentGame) {
