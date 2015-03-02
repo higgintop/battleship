@@ -17,13 +17,13 @@ html(lang='en-US')
           .pull-right.turnTracker.hidden
             p It is Player One's Turn
 
-
-        form
+        button#placeShips Place Ships
+        form.hidden
           input(type="text", placeholder="What is your name?", id='name')
           button(type="submit", class="btn btn-default", id="join-game") Play Game
 
-        button.rotateBtn rotate
-        .placeShipsContainer place my ships
+        button.rotateBtn.hidden rotate
+        .placeShipsContainer.hidden
         .gameContainer.hidden.row
           .col-md-5
             h2 My Board

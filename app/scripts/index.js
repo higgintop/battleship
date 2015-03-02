@@ -5,6 +5,17 @@
 var fbUrl = 'https://battleshipcohort8.firebaseio.com/games';
 var fb = new Firebase('https://battleshipcohort8.firebaseio.com/games');
 
+  var cleanBoard =      [ ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'] ];
+
 var gameBoardsList =
 [
   [
@@ -235,6 +246,7 @@ $('body').on('click', '#join-game', function(event) {
 
     // if no games exist in firebase
     if (games === null){
+      newGame.playerOne.myBoard = cleanBoard;
       newGame.playerOne.uid = playerId;
       gameId = fb.push();
       newGame.gameName=gameId.key();
@@ -259,6 +271,7 @@ $('body').on('click', '#join-game', function(event) {
           if(games[uuid].playerOne.uid === 0){
              var updatedGame = games[uuid];
              updatedGame.playerOne.uid = playerId;
+             updatedGame.playerOne.myBoard = cleanBoard;
              gameFb.set(updatedGame);
              findMyGame(function(theGame) {
                 firebaseToUpdate = new Firebase(fbUrl + '/' + myGame);
@@ -275,6 +288,7 @@ $('body').on('click', '#join-game', function(event) {
           else if(games[uuid].playerTwo.uid === 0) {
              var updatedGame = games[uuid];
              updatedGame.playerTwo.uid = playerId;
+             updatedGame.playerTwo.myBoard = cleanBoard;
              gameFb.set(updatedGame);
              needAGame = true;
              findMyGame(function(theGame) {
@@ -344,21 +358,10 @@ function showTurn() {
   }
 }
 
-  var cleanBoard =      [ ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'] ];
-
 
 function placeShips() {
 
-
+    
     // draw the board and append to placeShipsContainer
     drawGameBoard(cleanBoard, $('.placeShipsContainer'));
   
@@ -456,6 +459,8 @@ $('.placeShipsContainer').on('click', 'td', function(){
     if (cleanBoard[row][col] === '*'){
       if (ships[0].orientation === 'horizontal'){
         placeHorizontalShip(row, col);
+      } else if (ships[0].orientation === 'vertical') {
+        placeVerticalShip(row, col);
       }
     } else {
       alert('invalid placement');
@@ -467,7 +472,6 @@ function placeHorizontalShip(row, col){
    var isValid = true;
 
    for(var i=1; i < ships[0].spaces; i++){
-    console.log(cleanBoard[row][col+i]);
     if(cleanBoard[row][col + i] !== '*'){
       isValid = false;
       alert('invalid placement');
@@ -484,12 +488,53 @@ function placeHorizontalShip(row, col){
      ships.shift();
      if(!ships[0]) {
       alert('DONE');
+      $('.placeShipsContainer').toggleClass('hidden');
+      $('.rotateBtn').toggleClass('hidden');
+      $('form').toggleClass('hidden');
+      $('#placeShips').toggleClass('hidden');
      }
-
 
    }
 
 }
+
+function placeVerticalShip(row, col) {
+     var isValid = true;
+
+   for(var i=1; i < ships[0].spaces; i++){
+    if(cleanBoard[row + i][col] !== '*'){
+      isValid = false;
+      alert('invalid placement');
+    } 
+   }
+
+   if(isValid){
+    for(var i=0; i < ships[0].spaces; i++){
+      cleanBoard[row + i][col] = ships[0].name;
+     }
+     placeShips();
+
+     // update ship
+     ships.shift();
+     if(!ships[0]) {
+      alert('DONE');
+      $('.placeShipsContainer').toggleClass('hidden');
+      $('.rotateBtn').toggleClass('hidden');
+      $('form').toggleClass('hidden');
+      $('#placeShips').toggleClass('hidden');
+     }
+
+   }
+
+}
+
+$('#placeShips').on('click', function() {
+  placeShips();
+  $('.placeShipsContainer').toggleClass('hidden');
+  $('.rotateBtn').toggleClass('hidden');
+
+
+});
 
 
 
