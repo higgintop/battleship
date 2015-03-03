@@ -1,0 +1,9 @@
+{
+  "firebase": "battleshipcohort8",
+  "public": "public",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**"
+  ]
+}

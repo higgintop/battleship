@@ -154,13 +154,13 @@ function checkHit(boardToCheck, coord1, coord2, boardToUpdate, playerToHit) {
     }
     function scoreIt(playerHit){
       var ships = boardToCheck.toString(),
-            shipLetters = ['A', 'B', 'C', 'S', 'D'];
+      shipLetters = ['A', 'B', 'C', 'S', 'D'];
       boardToUpdate[coord1][coord2] = "H";
-        boardToCheck[coord1][coord2] = "H";
-        hitCount(ships, shipLetters, playerToHit);
-        if(playerHit === 0){
-        showQuickUpdate('You sunk a ship!');
-        }
+      boardToCheck[coord1][coord2] = "H";
+      hitCount(ships, shipLetters, playerToHit);
+      if(playerHit === 0){
+      showQuickUpdate('You sunk a ship!');
+      }
     }
 }
 
@@ -204,7 +204,7 @@ function hitCount(shipString, letter, playerToHit){
       return a + b;
     });
     if (playerToHit.hitCountDownTotal === 1) {
-      showQuickUpdate('Game Over. All of ' + playerToHit + '\s ships have been sunk.');
+      showQuickUpdate('Game Over.!');
     }
 }
 
