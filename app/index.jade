@@ -10,15 +10,27 @@ html(lang='en-US')
       <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
       .container
-        h1 Battleship
+        .page-header.clearfix
+          h1 Battleship
+          .statusBoard.pull-right.hidden
+          br
+          .pull-right.turnTracker.hidden
+            p It is Player One's Turn
 
-        form
+        button#placeShips Place Ships
+        form.hidden
           input(type="text", placeholder="What is your name?", id='name')
           button(type="submit", class="btn btn-default", id="join-game") Play Game
-        .statusBoard
-        .gameBoardContainer
-          .playerOwnBoard.hidden myboard
-          .playerOpponentBoard.hidden opponentboard
+
+        button.rotateBtn.hidden rotate
+        .placeShipsContainer.hidden
+        .gameContainer.hidden.row
+          .col-md-5
+            h2 My Board
+            .playerOwnBoard
+          .col-md-5.col-md-offset-2
+            h2 My Guesses
+            .playerOpponentBoard
 
 
 
