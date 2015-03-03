@@ -1,12 +1,8 @@
 @import "../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap";
 
-
-
 .hidden {
-
 	display:none;
 }
-
 .game_board {
 
     width: 484px;
@@ -20,8 +16,8 @@
         font-size: 18px;
     }
 }
+.gameBoardContainer {
 
-.gameContainer {
     .playerOwnBoard {
     	float: left;
     }
@@ -42,4 +38,10 @@
 }
 .white {
     background-color: mediumpurple;
+}
+.statusUpdate {
+    font-size: 18px;
+}
+.redupdate {
+    color: red;
 }

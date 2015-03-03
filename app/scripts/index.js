@@ -1,11 +1,30 @@
 /* jshint jquery:true */
+/* _: true */
 'use strict'
 
-// firebase
-var fbUrl = 'https://battleshipcohort8.firebaseio.com/games';
-var fb = new Firebase('https://battleshipcohort8.firebaseio.com/games');
-
-  var cleanBoard =      [ ['*','*','*','*','*','*','*','*','*','*'],
+var fbUrl = 'https://battleshipcohort8.firebaseio.com/games',
+    fb = new Firebase('https://battleshipcohort8.firebaseio.com/games'),
+    ships = [
+             {name: 'A',
+              spaces: 5,
+              orientation: 'horizontal'
+             },
+             {name: 'B',
+              spaces: 4,
+              orientation: 'horizontal'
+             },
+             {name: 'C',
+              spaces: 3,
+              orientation: 'horizontal'
+             },
+             {name: 'S',
+              spaces: 3,
+              orientation: 'horizontal'},
+             {name: 'D',
+              spaces: 2,
+              orientation: 'horizontal'}
+            ],
+    cleanBoard =        [['*','*','*','*','*','*','*','*','*','*'],
                          ['*','*','*','*','*','*','*','*','*','*'],
                          ['*','*','*','*','*','*','*','*','*','*'],
                          ['*','*','*','*','*','*','*','*','*','*'],
@@ -14,42 +33,24 @@ var fb = new Firebase('https://battleshipcohort8.firebaseio.com/games');
                          ['*','*','*','*','*','*','*','*','*','*'],
                          ['*','*','*','*','*','*','*','*','*','*'],
                          ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'] ];
-
-var gameBoardsList =
-[
-  [
-    ['A','*','*','*','*','*','*','*','*','*'],
-    ['A','*','*','*','*','*','*','*','*','*'],
-    ['A','*','*','*','*','*','*','*','*','*'],
-    ['A','*','*','*','*','S','S','S','*','*'],
-    ['A','*','*','*','*','*','*','*','*','*'],
-    ['*','*','*','*','*','*','*','*','*','*'],
-    ['*','*','*','*','*','*','*','*','*','*'],
-    ['*','C','*','B','B','B','B','*','*','*'],
-    ['*','C','*','*','*','*','*','*','D','*'],
-    ['*','C','*','*','*','*','*','*','D','*']
-  ],
-  [
-    ['*','D','D','*','*','*','*','*','*','*'],
-    ['*','*','*','*','*','*','*','*','B','*'],
-    ['*','*','*','C','C','C','*','*','B','*'],
-    ['*','*','*','*','*','*','*','*','B','*'],
-    ['*','*','*','*','*','*','*','*','B','*'],
-    ['S','S','S','*','*','*','*','*','*','*'],
-    ['*','*','*','*','*','*','*','*','*','*'],
-    ['*','A','A','A','A','A','*','*','*','*'],
-    ['*','*','*','*','*','*','*','*','*','*'],
-    ['*','*','*','*','*','*','*','*','*','*']
-  ]
-];
-var myGame;
-var firebaseToUpdate;
-var newGame = {
+                         ['*','*','*','*','*','*','*','*','*','*']],
+    defaultBoard =      [['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*'],
+                         ['*','*','*','*','*','*','*','*','*','*']],
+    myGame,
+    firebaseToUpdate,
+    newGame = {
       playerOne: {
-        myBoard: gameBoardsList[0],
-        opponentBoard: gameBoardsList[1],
-        myGuessesBoard: [
+        myBoard: cleanBoard,
+        opponentBoard: defaultBoard,
+        myGuessesBoard: [['*','*','*','*','*','*','*','*','*','*'],
                          ['*','*','*','*','*','*','*','*','*','*'],
                          ['*','*','*','*','*','*','*','*','*','*'],
                          ['*','*','*','*','*','*','*','*','*','*'],
@@ -58,22 +59,21 @@ var newGame = {
                          ['*','*','*','*','*','*','*','*','*','*'],
                          ['*','*','*','*','*','*','*','*','*','*'],
                          ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*']
-                        ],
+                         ['*','*','*','*','*','*','*','*','*','*']],
         A: 5,
         B: 4,
         C: 3,
         S: 3,
         D: 2,
         uid: 0,
+        handle: '',
         hitCountDown:[0,0,0,0,0],
         hitCountDownTotal: ''
     },
      playerTwo: {
-        myBoard: gameBoardsList[1],
-        opponentBoard: gameBoardsList[0],
-        myGuessesBoard: [
+        myBoard: cleanBoard,
+        opponentBoard: defaultBoard,
+        myGuessesBoard: [['*','*','*','*','*','*','*','*','*','*'],
                          ['*','*','*','*','*','*','*','*','*','*'],
                          ['*','*','*','*','*','*','*','*','*','*'],
                          ['*','*','*','*','*','*','*','*','*','*'],
@@ -82,15 +82,14 @@ var newGame = {
                          ['*','*','*','*','*','*','*','*','*','*'],
                          ['*','*','*','*','*','*','*','*','*','*'],
                          ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*'],
-                         ['*','*','*','*','*','*','*','*','*','*']
-                        ],
+                         ['*','*','*','*','*','*','*','*','*','*']],
         A: 5,
         B: 4,
         C: 3,
         S: 3,
         D: 2,
         uid: 0,
+        handle: '',
         hitCountDown:[0,0,0,0,0],
         hitCountDownTotal: ''
       },
@@ -105,7 +104,7 @@ $('.playerOpponentBoard').on('click', 'td', function() {
     var yCoord = $(this).index();
     var xCoord = $(this).closest('tr').index();
     if ($(this).text() !== '*') {
-      alert('This tile has already been guessed. Select another.');
+      showQuickUpdate('This tile has already been guessed. Select another.');
     } else {
       if (newGame.isPlayerOneTurn && (newGame.playerOne.uid === fb.getAuth().uid)) {
           checkHit(newGame.playerTwo.myBoard, xCoord, yCoord, newGame.playerOne.myGuessesBoard, newGame.playerTwo);
@@ -114,7 +113,7 @@ $('.playerOpponentBoard').on('click', 'td', function() {
           checkHit(newGame.playerOne.myBoard, xCoord, yCoord, newGame.playerTwo.myGuessesBoard, newGame.playerOne);
           switchTurns(newGame.isPlayerOneTurn);
       } else {
-        alert('not your turn');
+        showQuickUpdate('It is not your turn.');
       }
     }
     firebaseToUpdate.set(newGame);
@@ -124,42 +123,45 @@ $('.playerOpponentBoard').on('click', 'td', function() {
 function checkHit(boardToCheck, coord1, coord2, boardToUpdate, playerToHit) {
     switch (boardToCheck[coord1][coord2]) {
         case 'A':
+            showQuickUpdate('Hit!');
             playerToHit.A -= 1;
             scoreIt(playerToHit.A);
             break;
         case 'B':
+            showQuickUpdate('Hit!');
             playerToHit.B -= 1;
             scoreIt(playerToHit.B);
             break;
         case 'C':
+            showQuickUpdate('Hit!');
             playerToHit.C -= 1;
             scoreIt(playerToHit.C);
             break;
         case 'S':
+            showQuickUpdate('Hit!');
             playerToHit.S -= 1;
             scoreIt(playerToHit.S);
             break;
         case 'D':
+            showQuickUpdate('Hit!');
             playerToHit.D -= 1;
             scoreIt(playerToHit.D);
             break;
         default:
-            alert('Miss! Try again next time.');
+            showQuickUpdate('Miss! Try again next time.');
             boardToUpdate[coord1][coord2] = "M";
             boardToCheck[coord1][coord2] = "M";
     }
     function scoreIt(playerHit){
-    	var ships = boardToCheck.toString(),
+      var ships = boardToCheck.toString(),
             shipLetters = ['A', 'B', 'C', 'S', 'D'];
-            //countDown = playerToHit.hitCountDown,
-            //countDownTotal = playerToHit.hitCountDownTotal;
-    	boardToUpdate[coord1][coord2] = "H";
+      boardToUpdate[coord1][coord2] = "H";
         boardToCheck[coord1][coord2] = "H";
         hitCount(ships, shipLetters, playerToHit);
         if(playerHit === 0){
-            alert('SUNK!!!');
+        showQuickUpdate('You sunk a ship!');
         }
-    };
+    }
 }
 
 function drawGameBoard(playerBoard, destination) {
@@ -196,16 +198,13 @@ function hitCount(shipString, letter, playerToHit){
         shipCount++;
         }
       }
-    console.log(playerToHit);
-    console.log(playerToHit.hitCountDown);
-    console.log(playerToHit.hitCountDown[0]);
-	  playerToHit.hitCountDown[i] = shipCount;
+    playerToHit.hitCountDown[i] = shipCount;
     }
     playerToHit.hitCountDownTotal = playerToHit.hitCountDown.reduce(function(a, b) {
       return a + b;
     });
     if (playerToHit.hitCountDownTotal === 1) {
-    	alert('Game Over');
+      showQuickUpdate('Game Over. All of ' + playerToHit + '\s ships have been sunk.');
     }
 }
 
@@ -223,31 +222,23 @@ $('body').on('click', '#join-game', function(event) {
   $('form').addClass('hidden');
   $('.statusBoard').removeClass('hidden');
   $('.turnTracker').removeClass('hidden');
-
  event.preventDefault();
-
  var needAGame = false;
-
  var playerName = $('#name').val();
  var playerId;
 
- // attempt to log in anonymous
  fb.authAnonymously(function(error, authData) {
   if (error) {
     console.log("Login Failed!", error);
   } else {
     playerId = authData.uid;
   }
-
-
-  // check to see if there are any games when joining
   fb.once("value", function(snapshot) {
     var games = snapshot.val();
-
-    // if no games exist in firebase
     if (games === null){
       newGame.playerOne.myBoard = cleanBoard;
       newGame.playerOne.uid = playerId;
+      newGame.playerOne.handle=playerName;
       gameId = fb.push();
       newGame.gameName=gameId.key();
       gameId.set(newGame);
@@ -264,18 +255,18 @@ $('body').on('click', '#join-game', function(event) {
       });
     }
     else {
-      // check those games
        Object.keys(games).forEach(function (uuid) {
           var gameUrl = fbUrl + '/' + uuid;
           var gameFb = new Firebase(gameUrl);
           if(games[uuid].playerOne.uid === 0){
-             var updatedGame = games[uuid];
-             updatedGame.playerOne.uid = playerId;
-             updatedGame.playerOne.myBoard = cleanBoard;
-             gameFb.set(updatedGame);
-             findMyGame(function(theGame) {
-                firebaseToUpdate = new Firebase(fbUrl + '/' + myGame);
-                if (fb.getAuth().uid===playerId) {
+            var updatedGame = games[uuid];
+            updatedGame.playerOne.uid = playerId;
+            newGame.playerOne.handle=playerName;
+            updatedGame.playerOne.myBoard = cleanBoard;
+            gameFb.set(updatedGame);
+            findMyGame(function(theGame) {
+              firebaseToUpdate = new Firebase(fbUrl + '/' + myGame);
+              if (fb.getAuth().uid===playerId) {
             drawGameBoard(newGame.playerOne.myGuessesBoard, $('.playerOpponentBoard'));
             drawGameBoard(newGame.playerOne.myBoard, $('.playerOwnBoard'));
               $('.gameContainer').removeClass('hidden');
@@ -286,16 +277,17 @@ $('body').on('click', '#join-game', function(event) {
           });
         }
           else if(games[uuid].playerTwo.uid === 0) {
-             var updatedGame = games[uuid];
-             updatedGame.playerTwo.uid = playerId;
-             updatedGame.playerTwo.myBoard = cleanBoard;
-             gameFb.set(updatedGame);
-             needAGame = true;
-             findMyGame(function(theGame) {
-                firebaseToUpdate = new Firebase(fbUrl + '/' + myGame);
-                if (fb.getAuth().uid===playerId) {
-                  drawGameBoard(newGame.playerTwo.myGuessesBoard, $('.playerOpponentBoard'));
-                  drawGameBoard(newGame.playerTwo.myBoard, $('.playerOwnBoard'));
+            var updatedGame = games[uuid];
+            updatedGame.playerTwo.uid = playerId;
+            updatedGame.playerTwo.handle=playerName;
+            updatedGame.playerTwo.myBoard = cleanBoard;
+            gameFb.set(updatedGame);
+            needAGame = true;
+            findMyGame(function(theGame) {
+              firebaseToUpdate = new Firebase(fbUrl + '/' + myGame);
+              if (fb.getAuth().uid===playerId) {
+                drawGameBoard(newGame.playerTwo.myGuessesBoard, $('.playerOpponentBoard'));
+                drawGameBoard(newGame.playerTwo.myBoard, $('.playerOwnBoard'));
                   $('.gameContainer').removeClass('hidden');
                   $('.statusBoard').empty();
                   $('.statusBoard').append('<div>You are player2.</div>');
@@ -308,13 +300,13 @@ $('body').on('click', '#join-game', function(event) {
        if(needAGame){
          newGame.playerOne.uid = 0;
          newGame.playerTwo.uid = 0;
+         newGame.playerOne.handle = '';
+         newGame.playerTwo.handle = '';
          var gameId = fb.push();
          newGame.gameName=gameId.key();
          gameId.set(newGame);
        }
-
       }
-
     });
   });
 });
@@ -322,20 +314,18 @@ $('body').on('click', '#join-game', function(event) {
 function findMyGame (callback) {
   fb.once('value', function(snap) {
     var gameList = snap.val();
-    console.log(gameList);
   _.forEach(gameList, function(game) {
     if (fb.getAuth().uid === game.playerOne.uid ||
         fb.getAuth().uid === game.playerTwo.uid) {
         myGame = game.gameName;
         callback(myGame);
      }
-    })
+    });
   });
-};
+}
 
 function watchFirebaseForChange () {
   firebaseToUpdate.on('value', function(currentGame) {
-    console.log('updating game based on firebase!');
     newGame=currentGame.val();
     if (fb.getAuth().uid === newGame.playerOne.uid) {
     drawGameBoard(newGame.playerOne.myGuessesBoard,$('.playerOpponentBoard'));
@@ -352,57 +342,36 @@ function watchFirebaseForChange () {
 function showTurn() {
   $('.turnTracker').empty();
   if (newGame.isPlayerOneTurn){
-    $('.turnTracker').append('<div>Player One\'s Turn</div>');
+    if(newGame.playerOne.handle === '') {
+       newGame.playerOne.handle = 'Player1';
+    } else {
+      $('.turnTracker').append('<div>' + newGame.playerOne.handle + '\'s Turn</div>');
+    }
   } else {
-    $('.turnTracker').append('<div>Player Two\'s Turn</div>');
+     if(newGame.playerOne.handle === '') {
+        newGame.playerOne.handle = 'Player2';
+    } else {
+    $('.turnTracker').append('<div>' + newGame.playerTwo.handle + '\'s Turn</div>');
+    }
   }
 }
 
-
 function placeShips() {
-
-    
     // draw the board and append to placeShipsContainer
     drawGameBoard(cleanBoard, $('.placeShipsContainer'));
-  
 }
-
-
-var ships = [
-
-  {name: 'A',
-  spaces: 5,
-  orientation: 'horizontal'}, 
-  {name: 'B',
-  spaces: 4,
-  orientation: 'horizontal'},
-  {name: 'C',
-  spaces: 3,
-  orientation: 'horizontal'},
-  {name: 'S',
-  spaces: 3,
-  orientation: 'horizontal'},
-  {name: 'D',
-  spaces: 2,
-  orientation: 'horizontal'}
-
-];
-
-
 
 $('.rotateBtn').on('click', function(){
   if(ships[0].orientation === 'horizontal'){
     ships[0].orientation = 'vertical';
   } else {
-    ships[0].orientation = 'horizontal'
+    ships[0].orientation = 'horizontal';
   }
 });
 
 $('.placeShipsContainer').on('mouseover', 'td', function(){
     var yCoord = $(this).index();
     var xCoord = $(this).closest('tr').index();
-    
-    // the xCoord, yCoord is the start or 'head' of the ship
     if(ships[0].orientation === 'horizontal') {
       var space = $(this);
       space.css('background-color', 'lightgrey');
@@ -448,12 +417,15 @@ $('.placeShipsContainer').on('mouseleave', 'td', function(){
       }
     }
 });
+$('#placeShips').on('click', function() {
+  placeShips();
+  $('.placeShipsContainer').toggleClass('hidden');
+  $('.rotateBtn').toggleClass('hidden');
+});
 
 $('.placeShipsContainer').on('click', 'td', function(){
     var col = $(this).index();
     var row = $(this).closest('tr').index();
-    console.log(row, col);
-    
 
     // logic to see if this is a valid click
     if (cleanBoard[row][col] === '*'){
@@ -463,7 +435,7 @@ $('.placeShipsContainer').on('click', 'td', function(){
         placeVerticalShip(row, col);
       }
     } else {
-      alert('invalid placement');
+      showQuickUpdate('That placement is invalid. Select another placement.');
     }
 });
 
@@ -474,28 +446,21 @@ function placeHorizontalShip(row, col){
    for(var i=1; i < ships[0].spaces; i++){
     if(cleanBoard[row][col + i] !== '*'){
       isValid = false;
-      alert('invalid placement');
-    } 
-   }
+      showQuickUpdate('That placement is invalid. Select another placement.');
+    }
+  }
 
    if(isValid){
     for(var i=0; i < ships[0].spaces; i++){
       cleanBoard[row][col + i] = ships[0].name;
      }
      placeShips();
-
-     // update ship
      ships.shift();
      if(!ships[0]) {
-      alert('DONE');
-      $('.placeShipsContainer').toggleClass('hidden');
-      $('.rotateBtn').toggleClass('hidden');
-      $('form').toggleClass('hidden');
-      $('#placeShips').toggleClass('hidden');
-     }
-
-   }
-
+      updateGameStatusBoard('You\'ve placed all of your ships. Enter your username.');
+      toggleShipPlacementDisplay();
+    }
+  }
 }
 
 function placeVerticalShip(row, col) {
@@ -504,56 +469,36 @@ function placeVerticalShip(row, col) {
    for(var i=1; i < ships[0].spaces; i++){
     if(cleanBoard[row + i][col] !== '*'){
       isValid = false;
-      alert('invalid placement');
-    } 
-   }
-
+      showQuickUpdate('That placement is invalid. Select another placement.');
+    }
+  }
    if(isValid){
     for(var i=0; i < ships[0].spaces; i++){
       cleanBoard[row + i][col] = ships[0].name;
      }
      placeShips();
-
-     // update ship
      ships.shift();
      if(!ships[0]) {
-      alert('DONE');
-      $('.placeShipsContainer').toggleClass('hidden');
-      $('.rotateBtn').toggleClass('hidden');
-      $('form').toggleClass('hidden');
-      $('#placeShips').toggleClass('hidden');
+      updateGameStatusBoard('You\'ve placed all of your ships. Enter your username.');
+      toggleShipPlacementDisplay();
      }
-
    }
-
 }
 
-$('#placeShips').on('click', function() {
-  placeShips();
+function toggleShipPlacementDisplay() {
   $('.placeShipsContainer').toggleClass('hidden');
   $('.rotateBtn').toggleClass('hidden');
+  $('form').toggleClass('hidden');
+  $('#placeShips').toggleClass('hidden');
+}
+function updateGameStatusBoard(message) {
+  $('.statusBoard').append('<div class="statusUpdate">' + message + '</div>');
+  $('.statusBoard').removeClass('hidden');
+}
+function showQuickUpdate(message) {
+  $('.statusBoard').empty();
+  $('.statusBoard').append('<div class="statusUpdate redUpdate">' + message + '</div>');
+  $('.statusBoard').removeClass('hidden');
+  $('.statusBoard').fadeOut(4000);
 
-
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
